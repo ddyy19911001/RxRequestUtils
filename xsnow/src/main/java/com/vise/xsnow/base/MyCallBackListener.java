@@ -8,20 +8,20 @@ import com.vise.xsnow.http.callback.ACallback;
  * @param <T>
  */
 public  abstract class MyCallBackListener<T> extends ACallback<T>{
-    MyCallBackInterface<T> callBackImp;
+    MyCallBackInterface<T> callBackInterface;
 
     public MyCallBackListener(MyCallBackInterface<T> callBackImp) {
-        this.callBackImp = callBackImp;
+        this.callBackInterface = callBackImp;
     }
 
     @Override
     public void onSuccess(T data) {
-        callBackImp.onRequestSuccess(data);
+        callBackInterface.onRequestSuccess(data);
     }
 
     @Override
     public void onFail(int errCode, String errMsg) {
-        callBackImp.onRequestFail(errCode, errMsg);
+        callBackInterface.onRequestFail(errCode, errMsg);
     }
 
 }
