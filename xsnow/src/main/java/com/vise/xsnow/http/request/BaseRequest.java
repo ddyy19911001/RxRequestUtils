@@ -2,6 +2,7 @@ package com.vise.xsnow.http.request;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.vise.log.ViseLog;
 import com.vise.utils.assist.SSLUtil;
 import com.vise.xsnow.common.ViseConfig;
@@ -302,7 +303,7 @@ public abstract class BaseRequest<R extends BaseRequest> {
         ViseHttp.getRetrofitBuilder().baseUrl(httpGlobalConfig.getBaseUrl());
 
         if (httpGlobalConfig.getConverterFactory() == null) {
-            httpGlobalConfig.converterFactory(GsonConverterFactory.create());
+            httpGlobalConfig.converterFactory(GsonConverterFactory.create(new Gson()));
         }
         ViseHttp.getRetrofitBuilder().addConverterFactory(httpGlobalConfig.getConverterFactory());
 
