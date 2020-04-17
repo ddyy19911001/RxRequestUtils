@@ -20,4 +20,4 @@ Step 2. Add the dependency
 	        implementation 'com.github.ddyy19911001:RxRequestUtils:1.0'
 	}
 
-使用说明：https://github.com/xiaoyaoyou1212/XSnow/wiki/%E8%AF%A6%E7%BB%86%E4%BD%BF%E7%94%A8%E4%BB%8B%E7%BB%8D
+使用说明：https://github.com/xiaoyaoyou1212/XSnow/wiki/详细使用介绍
