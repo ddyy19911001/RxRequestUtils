@@ -7,7 +7,7 @@ import com.vise.xsnow.http.callback.ACallback;
  * 回调接口实现类，用于自定义接口时使用
  * @param <T>
  */
-public  abstract class MyCallBackListener<T> extends ACallback<T>{
+public  class MyCallBackListener<T> extends ACallback<T>{
     MyCallBackInterface<T> callBackInterface;
 
     public MyCallBackListener(MyCallBackInterface<T> callBackImp) {
