@@ -33,7 +33,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
         }
         try {
             json = responseBody.string();
-            Log.i(ViseHttp.CONFIG().getTag(), "原始数据："+json);
+            Log.w(ViseHttp.CONFIG().getTag(), "原始数据："+json);
             if (type.equals(String.class)) {
                 T obj= (T) json;
                 ViseHttp.CONFIG().onInfoGet(obj);
