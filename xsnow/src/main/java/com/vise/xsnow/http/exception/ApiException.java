@@ -4,6 +4,8 @@ import android.net.ParseException;
 import android.util.Log;
 
 import com.google.gson.JsonParseException;
+import com.vise.xsnow.R;
+import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.mode.ApiCode;
 
 import org.json.JSONException;
@@ -49,7 +51,7 @@ public class ApiException extends Exception {
     }
 
     public static ApiException handleException(Throwable e) {
-        Log.e("HttpErro", e.getMessage()+"\ncause:"+e.getCause());
+        Log.e(ViseHttp.CONFIG().getTag(), e.getMessage()+"\ncause:"+e.getCause());
         ApiException ex;
         if (e instanceof HttpException) {
             HttpException httpException = (HttpException) e;
@@ -64,35 +66,35 @@ public class ApiException extends Exception {
                 case ApiCode.Http.BAD_GATEWAY:
                 case ApiCode.Http.SERVICE_UNAVAILABLE:
                 default:
-                    ex.message = "NETWORK_ERROR";
-                    ex.cause=String.valueOf(httpException.getMessage());
+                    ex.message = ViseHttp.getStr(R.string.NETWORK_ERROR);
+                    ex.cause=String.valueOf(httpException.getCause());
                     break;
             }
             return ex;
         } else if (e instanceof JsonParseException || e instanceof JSONException || e instanceof ParseException) {
             ex = new ApiException(e, ApiCode.Request.PARSE_ERROR);
-            ex.message = "PARSE_ERROR";
-            ex.cause=String.valueOf(e.getMessage());
+            ex.message =ViseHttp.getStr(R.string.PARSE_ERROR);
+            ex.cause=String.valueOf(e.getCause());
             return ex;
         } else if (e instanceof ConnectException) {
             ex = new ApiException(e, ApiCode.Request.NETWORK_ERROR);
-            ex.message = "NETWORK_ERROR";
-            ex.cause=String.valueOf(e.getMessage());
+            ex.message =ViseHttp.getStr(R.string.NETWORK_ERROR);
+            ex.cause=String.valueOf(e.getCause());
             return ex;
         } else if (e instanceof javax.net.ssl.SSLHandshakeException) {
             ex = new ApiException(e, ApiCode.Request.SSL_ERROR);
-            ex.message = "SSL_ERROR";
-            ex.cause=String.valueOf(e.getMessage());
+            ex.message = ViseHttp.getStr(R.string.SSL_ERROR);
+            ex.cause=String.valueOf(e.getCause());
             return ex;
         } else if (e instanceof SocketTimeoutException) {
             ex = new ApiException(e, ApiCode.Request.TIMEOUT_ERROR);
-            ex.message = "TIMEOUT_ERROR";
-            ex.cause=String.valueOf(e.getMessage());
+            ex.message = ViseHttp.getStr(R.string.TIMEOUT_ERROR);
+            ex.cause=String.valueOf(e.getCause());
             return ex;
         } else {
             ex = new ApiException(e, ApiCode.Request.UNKNOWN);
-            ex.message = e.getMessage();
-            ex.cause=String.valueOf(e.getMessage());
+            ex.message =  ViseHttp.getStr(R.string.UNKNOWN_ERRO);
+            ex.cause=String.valueOf(e.getCause());
             return ex;
         }
     }

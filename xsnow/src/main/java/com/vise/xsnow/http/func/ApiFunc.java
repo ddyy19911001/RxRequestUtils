@@ -1,5 +1,7 @@
 package com.vise.xsnow.http.func;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.vise.xsnow.http.ViseHttp;
 
@@ -26,8 +28,12 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
     public T apply(ResponseBody responseBody) throws Exception {
         Gson gson = new Gson();
         String json;
+        if(type.equals(ResponseBody.class)){
+            return (T) responseBody;
+        }
         try {
             json = responseBody.string();
+            Log.i(ViseHttp.CONFIG().getTag(), "原始数据："+json);
             if (type.equals(String.class)) {
                 T obj= (T) json;
                 ViseHttp.CONFIG().onInfoGet(obj);
@@ -38,6 +44,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
                 return obj;
             }
         } catch (IOException e) {
+            Log.i(ViseHttp.CONFIG().getTag(), "解析出错："+e.getMessage()+","+e.getCause());
             e.printStackTrace();
         } finally {
             responseBody.close();

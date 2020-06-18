@@ -40,6 +40,10 @@ public class ViseHttp {
         return NET_GLOBAL_CONFIG;
     }
 
+    public static String getStr(int strId){
+        return context.getResources().getString(strId);
+    }
+
     public static void init(Context appContext) {
         if (context == null && appContext != null) {
             context = appContext.getApplicationContext();
