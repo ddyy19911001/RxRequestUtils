@@ -23,7 +23,7 @@ public class HeadRequest extends BaseHttpRequest<HeadRequest> {
 
     @Override
     protected <T> Observable<T> execute(Type type) {
-        return apiService.head(suffixUrl, params).compose(this.<T>norTransformer(type));
+        return apiService.head(suffixUrl, params).compose(this.<T>norTransformer(type,getNowReqeustUrl()));
     }
 
     @Override

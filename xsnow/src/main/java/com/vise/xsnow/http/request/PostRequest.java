@@ -53,16 +53,16 @@ public class PostRequest extends BaseHttpRequest<PostRequest> {
                     }
                 }
             }
-            return apiService.postForm(suffixUrl, forms).compose(this.<T>norTransformer(type));
+            return apiService.postForm(suffixUrl, forms).compose(this.<T>norTransformer(type,getNowReqeustUrl()));
         }
         if (requestBody != null) {
-            return apiService.postBody(suffixUrl, requestBody).compose(this.<T>norTransformer(type));
+            return apiService.postBody(suffixUrl, requestBody).compose(this.<T>norTransformer(type,getNowReqeustUrl()));
         }
         if (content != null && mediaType != null) {
             requestBody = RequestBody.create(mediaType, content);
-            return apiService.postBody(suffixUrl, requestBody).compose(this.<T>norTransformer(type));
+            return apiService.postBody(suffixUrl, requestBody).compose(this.<T>norTransformer(type,getNowReqeustUrl()));
         }
-        return apiService.post(suffixUrl, params).compose(this.<T>norTransformer(type));
+        return apiService.post(suffixUrl, params).compose(this.<T>norTransformer(type,getNowReqeustUrl()));
     }
 
     @Override

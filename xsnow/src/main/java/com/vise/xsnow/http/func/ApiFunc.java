@@ -19,13 +19,17 @@ import okhttp3.ResponseBody;
  */
 public class ApiFunc<T> implements Function<ResponseBody, T> {
     private Type type;
+    private String requestUrl;
 
-    public ApiFunc(Type type) {
+    public ApiFunc(Type type,String requestUrl) {
         this.type = type;
+        this.requestUrl=requestUrl;
     }
 
     @Override
     public T apply(ResponseBody responseBody) throws Exception {
+        ViseHttp.CONFIG().timers.remove(requestUrl);
+        ViseHttp.CONFIG().onRequestWatingDialogListener.onRequestOverLoadingNeedClose();
         Gson gson = new Gson();
         String json;
         if(type.equals(ResponseBody.class)){
@@ -33,7 +37,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
         }
         try {
             json = responseBody.string();
-            Log.w(ViseHttp.CONFIG().getTag(), "原始数据："+json);
+            Log.w(ViseHttp.CONFIG().getTag(), "原始数据：\n"+json);
             if (type.equals(String.class)) {
                 T obj= (T) json;
                 ViseHttp.CONFIG().onInfoGet(obj);

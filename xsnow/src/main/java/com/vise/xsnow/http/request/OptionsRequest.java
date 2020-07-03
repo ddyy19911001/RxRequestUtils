@@ -23,7 +23,7 @@ public class OptionsRequest extends BaseHttpRequest<OptionsRequest> {
 
     @Override
     protected <T> Observable<T> execute(Type type) {
-        return apiService.options(suffixUrl, params).compose(this.<T>norTransformer(type));
+        return apiService.options(suffixUrl, params).compose(this.<T>norTransformer(type,getNowReqeustUrl()));
     }
 
     @Override

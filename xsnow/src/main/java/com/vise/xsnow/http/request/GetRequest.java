@@ -23,7 +23,7 @@ public class GetRequest extends BaseHttpRequest<GetRequest> {
 
     @Override
     protected <T> Observable<T> execute(Type type) {
-        return apiService.get(suffixUrl, params).compose(this.<T>norTransformer(type));
+        return apiService.get(suffixUrl, params).compose(this.<T>norTransformer(type,getNowReqeustUrl()));
     }
 
     @Override

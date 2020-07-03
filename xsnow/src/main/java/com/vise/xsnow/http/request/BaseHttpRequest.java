@@ -81,6 +81,7 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
     public <T> void request(ACallback<T> callback) {
         generateGlobalConfig();
         generateLocalConfig();
+        httpGlobalConfig.startTimer((this.baseUrl==null?httpGlobalConfig.getBaseUrl():this.baseUrl)+suffixUrl);
         logTag=httpGlobalConfig.getTag();
         Log.i(logTag, "请求地址："+(this.baseUrl==null?httpGlobalConfig.getBaseUrl():this.baseUrl)+suffixUrl);
         Log.i(logTag, "请求时间："+format.format(new Date()));
@@ -89,6 +90,11 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
         String paramsStr=this.params.size()==0?"null": GsonUtil.gson().toJson(this.params);
         Log.i(logTag, "请求参数："+paramsStr);
         execute(callback);
+    }
+
+
+    public String getNowReqeustUrl(){
+        return (this.baseUrl==null?httpGlobalConfig.getBaseUrl():this.baseUrl)+suffixUrl;
     }
 
 
@@ -130,14 +136,14 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
 
     protected abstract <T> void execute(ACallback<T> callback);
 
-    protected <T> ObservableTransformer<ResponseBody, T> norTransformer(final Type type) {
+    protected <T> ObservableTransformer<ResponseBody, T> norTransformer(final Type type, final String requestUrl) {
         return new ObservableTransformer<ResponseBody, T>() {
             @Override
             public ObservableSource<T> apply(Observable<ResponseBody> apiResultObservable) {
                 return apiResultObservable
                         .subscribeOn(Schedulers.io())
                         .unsubscribeOn(Schedulers.io())
-                        .map(new ApiFunc<T>(type))
+                        .map(new ApiFunc<T>(type,requestUrl))
                         .observeOn(AndroidSchedulers.mainThread())
                         .retryWhen(new ApiRetryFunc(retryCount, retryDelayMillis));
             }

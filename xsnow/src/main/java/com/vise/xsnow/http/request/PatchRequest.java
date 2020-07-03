@@ -23,7 +23,7 @@ public class PatchRequest extends BaseHttpRequest<PatchRequest> {
 
     @Override
     protected <T> Observable<T> execute(Type type) {
-        return apiService.patch(suffixUrl, params).compose(this.<T>norTransformer(type));
+        return apiService.patch(suffixUrl, params).compose(this.<T>norTransformer(type,getNowReqeustUrl()));
     }
 
     @Override

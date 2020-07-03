@@ -23,7 +23,7 @@ public class DeleteRequest extends BaseHttpRequest<DeleteRequest> {
 
     @Override
     protected <T> Observable<T> execute(Type type) {
-        return apiService.delete(suffixUrl, params).compose(this.<T>norTransformer(type));
+        return apiService.delete(suffixUrl, params).compose(this.<T>norTransformer(type,getNowReqeustUrl()));
     }
 
     @Override

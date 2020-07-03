@@ -63,7 +63,7 @@ public class UploadRequest extends BaseHttpRequest<UploadRequest> {
                 }
             }
         }
-        return apiService.uploadFiles(suffixUrl, multipartBodyParts).compose(this.<T>norTransformer(type));
+        return apiService.uploadFiles(suffixUrl, multipartBodyParts).compose(this.<T>norTransformer(type,getNowReqeustUrl()));
     }
 
     @Override

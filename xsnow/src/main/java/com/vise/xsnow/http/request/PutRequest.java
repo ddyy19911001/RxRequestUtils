@@ -23,7 +23,7 @@ public class PutRequest extends BaseHttpRequest<PutRequest> {
 
     @Override
     protected <T> Observable<T> execute(Type type) {
-        return apiService.put(suffixUrl, params).compose(this.<T>norTransformer(type));
+        return apiService.put(suffixUrl, params).compose(this.<T>norTransformer(type,getNowReqeustUrl()));
     }
 
     @Override

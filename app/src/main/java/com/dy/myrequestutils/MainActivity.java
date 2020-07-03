@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.vise.xsnow.base.MyCallBackBind;
-import com.vise.xsnow.base.MyCallBackImp;
+import com.vise.xsnow.base.MyCallBackInterface;
+import com.vise.xsnow.base.MyCallBackListener;
 import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.callback.ACallback;
@@ -62,6 +62,32 @@ public class MainActivity extends AppCompatActivity {
         btGet = (Button) findViewById(R.id.bt_get);
         btDown = (Button) findViewById(R.id.bt_down);
         initHttpRequest();
+        ViseHttp.CONFIG().setNeedShowLoading(true);
+        ViseHttp.CONFIG().setOnRequestWatingDialogListener(new HttpGlobalConfig.OnRequestWatingDialogListener() {
+            @Override
+            public void onTimeOverToShowLoading() {
+                Log.v("测试","此时应该显示转圈圈");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showTs("此时应该显示转圈圈");
+                    }
+                });
+
+            }
+
+            @Override
+            public void onRequestOverLoadingNeedClose() {
+                Log.w("测试","此时应该关闭转圈圈");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showTs("此时应该关闭转圈圈");
+                    }
+                });
+
+            }
+        });
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 //可以自己设置IView回调，IView继承接口MyCallBackImp<T>
                 ViseHttp.GET("api/module/app_module")
                         .tag(getClass().getSimpleName())
-                        .request(new MyCallBackBind<AppModuleInfo>(new MyCallBackImp<AppModuleInfo>() {
+                        .request(new MyCallBackListener(new MyCallBackInterface<AppModuleInfo>() {
                             @Override
                             public void onRequestSuccess(AppModuleInfo data) {
 //                                showTs("获取结果成功");

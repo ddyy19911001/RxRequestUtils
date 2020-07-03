@@ -52,6 +52,7 @@ public class ApiException extends Exception {
 
     public static ApiException handleException(Throwable e) {
         Log.e(ViseHttp.CONFIG().getTag(), e.getMessage()+"\ncause:"+e.getCause());
+        ViseHttp.CONFIG().onErroRemoveAllTimer();
         ApiException ex;
         if (e instanceof HttpException) {
             HttpException httpException = (HttpException) e;

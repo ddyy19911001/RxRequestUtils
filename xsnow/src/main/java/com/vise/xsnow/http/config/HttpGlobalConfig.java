@@ -1,11 +1,5 @@
 package com.vise.xsnow.http.config;
 
-import android.os.Handler;
-import android.os.Message;
-import android.text.TextUtils;
-
-import androidx.annotation.NonNull;
-
 import com.vise.xsnow.common.ViseConfig;
 import com.vise.xsnow.http.ViseHttp;
 import com.vise.xsnow.http.core.ApiCookie;
@@ -16,6 +10,7 @@ import com.vise.xsnow.http.interceptor.OfflineCacheInterceptor;
 import com.vise.xsnow.http.interceptor.OnlineCacheInterceptor;
 import com.vise.xsnow.http.mode.ApiHost;
 import com.vise.xsnow.http.ssl.MySSLSocketFactory;
+import com.vise.xsnow.util.RequestTimer;
 
 import java.io.File;
 import java.net.Proxy;
@@ -31,7 +26,6 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -39,6 +33,7 @@ import okhttp3.Cache;
 import okhttp3.Call.Factory;
 import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
+import okhttp3.Request;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;
 
@@ -65,11 +60,14 @@ public class HttpGlobalConfig {
     private int retryDelayMillis;//请求失败重试间隔时间
     private int retryCount;//请求失败重试次数
     private boolean needLog=true;
-    public String logTag="HttpLog";
+    public String logTag="RxHttpLog";
     private static HttpGlobalConfig instance;
     private IBaseRequestErroLitener httpErroListener;//网络请求错误时回调
     private static OnResponseInfoGetLitener onResponseInfoGetLitener;//获取到服务器返回数据并解析成对象后回调
-
+    private int totalTime=2;//设置超过多少秒开始显示转圈
+    public OnRequestWatingDialogListener onRequestWatingDialogListener;//设置监听
+    private boolean needShowLoading=false;//设置超过一定时间是否显示转圈
+    public HashMap<String,RequestTimer> timers=new HashMap<>();
     private HttpGlobalConfig() {
     }
 
@@ -85,8 +83,60 @@ public class HttpGlobalConfig {
         return instance;
     }
 
+    public void setTotalTime(int timesecond){
+        totalTime=timesecond;
+    }
+
+    public interface OnRequestWatingDialogListener{
+        //最大等待时间结束，需要显示转圈圈
+        void onTimeOverToShowLoading();
+        //请求成功了，不需要显示转圈圈
+        void onRequestOverLoadingNeedClose();
+    }
+
+    public void setOnRequestWatingDialogListener(OnRequestWatingDialogListener onRequestWatingDialogListener) {
+        this.onRequestWatingDialogListener = onRequestWatingDialogListener;
+    }
 
 
+
+    public void onErroRemoveAllTimer(){
+        timers.clear();
+        onRequestWatingDialogListener.onRequestOverLoadingNeedClose();
+    }
+
+
+    public void startTimer(final String requestUrl){
+        if(needShowLoading) {
+            final RequestTimer timer = new RequestTimer();
+            timer.setIntervalTime(1000);
+            timer.setTotalTime(1000 * totalTime);
+            timer.setTimerLiener(new RequestTimer.TimeListener() {
+                @Override
+                public void onFinish() {
+                    if(timers.isEmpty()){
+                        return;
+                    }
+                    RequestTimer lastRequestTimer=timers.get(requestUrl);
+                    if (onRequestWatingDialogListener != null&&lastRequestTimer!=null) {
+                        onRequestWatingDialogListener.onTimeOverToShowLoading();
+                        timers.remove(requestUrl);
+                    }
+                }
+
+                @Override
+                public void onInterval(long remainTime) {
+
+                }
+            });
+            timer.start();
+            timers.put(requestUrl, timer);
+        }
+    }
+
+    public void setNeedShowLoading(boolean needShowLoading) {
+        this.needShowLoading = needShowLoading;
+    }
 
     public  <T>void onInfoGet(final T data){
         if(onResponseInfoGetLitener!=null){
