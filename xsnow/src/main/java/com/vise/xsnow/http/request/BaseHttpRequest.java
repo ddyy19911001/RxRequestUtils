@@ -84,11 +84,11 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
         String paramsStr=this.params.size()==0?"null": GsonUtil.gson().toJson(this.params);
         httpGlobalConfig.startTimer((this.baseUrl==null?httpGlobalConfig.getBaseUrl():this.baseUrl)+suffixUrl+"/params="+paramsStr);
         logTag=httpGlobalConfig.getTag();
-        Log.i(logTag, "请求地址："+(this.baseUrl==null?httpGlobalConfig.getBaseUrl():this.baseUrl)+suffixUrl);
-        Log.i(logTag, "请求时间："+format.format(new Date()));
+        Log.i(logTag, "("+suffixUrl+")请求地址："+(this.baseUrl==null?httpGlobalConfig.getBaseUrl():this.baseUrl)+suffixUrl);
+        Log.i(logTag, "("+suffixUrl+")请求时间："+format.format(new Date()));
         String headerStr=((this.headers.headersMap==null||this.headers.headersMap.size()==0)?"null": this.headers.toJSONString());
-        Log.i(logTag, "请求头："+headerStr);
-        Log.i(logTag, "请求参数："+paramsStr);
+        Log.i(logTag, "("+suffixUrl+")请求头："+headerStr);
+        Log.i(logTag, "("+suffixUrl+")请求参数："+paramsStr);
         execute(callback);
     }
 

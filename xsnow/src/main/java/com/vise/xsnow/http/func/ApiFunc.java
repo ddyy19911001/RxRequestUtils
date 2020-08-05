@@ -35,9 +35,13 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
         if(type.equals(ResponseBody.class)){
             return (T) responseBody;
         }
+        String requestUrl="";
+        if(keyRequestUrl!=null&&keyRequestUrl.contains("/")){
+            requestUrl=keyRequestUrl.substring(0,keyRequestUrl.lastIndexOf("/"));
+        }
         try {
             json = responseBody.string();
-            Log.w(ViseHttp.CONFIG().getTag(), "原始数据：\n"+json);
+            Log.w(ViseHttp.CONFIG().getTag(), "(请求结果："+requestUrl+")↓↓↓↓↓\n"+json);
             if (type.equals(String.class)) {
                 T obj= (T) json;
                 ViseHttp.CONFIG().onInfoGet(obj);
@@ -48,7 +52,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
                 return obj;
             }
         } catch (IOException e) {
-            Log.i(ViseHttp.CONFIG().getTag(), "解析出错："+e.getMessage()+","+e.getCause());
+            Log.e(ViseHttp.CONFIG().getTag(), "(解析出错："+requestUrl+")\n"+e.getMessage()+","+e.getCause());
             e.printStackTrace();
         } finally {
             responseBody.close();
