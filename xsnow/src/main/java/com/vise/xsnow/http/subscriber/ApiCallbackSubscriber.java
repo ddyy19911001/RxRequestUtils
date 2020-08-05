@@ -52,7 +52,7 @@ public class ApiCallbackSubscriber<T> extends ApiSubscriber<T> {
     public void onNext(T t) {
         this.data = t;
         String backData = GsonUtil.gson().toJson(t);
-        Log.d(tag, "\n------>>>请求最终结果<<<------\n"+backData);
+        Log.d(tag, "------>>>请求最终结果<<<------\n"+backData);
         callBack.onSuccess(t);
     }
 

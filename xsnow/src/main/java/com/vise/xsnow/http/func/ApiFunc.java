@@ -41,7 +41,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
         }
         try {
             json = responseBody.string();
-            Log.i(ViseHttp.CONFIG().getTag()+"\n", "\n请求原始结果：("+requestUrl+")↓↓↓↓↓\n"+json);
+            Log.i(ViseHttp.CONFIG().getTag()+"\n", "请求原始结果：("+requestUrl+")↓↓↓↓↓\n"+json);
             if (type.equals(String.class)) {
                 T obj= (T) json;
                 ViseHttp.CONFIG().onInfoGet(obj);
@@ -52,7 +52,7 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
                 return obj;
             }
         } catch (IOException e) {
-            Log.e(ViseHttp.CONFIG().getTag()+"\n", "\n请求错误：("+requestUrl+")\n"+e.getMessage()+","+e.getCause());
+            Log.e(ViseHttp.CONFIG().getTag()+"\n", "请求错误：("+requestUrl+")\n"+e.getMessage()+","+e.getCause());
             e.printStackTrace();
         } finally {
             responseBody.close();
