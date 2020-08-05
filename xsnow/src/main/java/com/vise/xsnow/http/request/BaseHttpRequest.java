@@ -87,7 +87,7 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
         logTag=httpGlobalConfig.getTag();
         String url = (this.baseUrl == null ? httpGlobalConfig.getBaseUrl() : this.baseUrl) + suffixUrl;
         String requestBodyLog="\n请求地址："+url+"\n"+"请求时间："+format.format(new Date())+"\n请求头："+headerStr+"\n请求参数："+paramsStr;
-        Log.i(logTag, requestBodyLog);
+        Log.i(logTag+"\n", requestBodyLog);
         execute(callback);
     }
 
