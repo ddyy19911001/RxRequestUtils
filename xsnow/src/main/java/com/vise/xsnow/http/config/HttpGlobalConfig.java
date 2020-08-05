@@ -102,7 +102,9 @@ public class HttpGlobalConfig {
 
     public void onErroRemoveAllTimer(){
         timers.clear();
-        onRequestWatingDialogListener.onRequestOverLoadingNeedClose();
+        if(onRequestWatingDialogListener!=null) {
+            onRequestWatingDialogListener.onRequestOverLoadingNeedClose();
+        }
     }
 
 
@@ -118,7 +120,7 @@ public class HttpGlobalConfig {
                         return;
                     }
                     RequestTimer lastRequestTimer=timers.get(requestUrl);
-                    if (onRequestWatingDialogListener != null&&lastRequestTimer!=null) {
+                    if (onRequestWatingDialogListener!= null&&lastRequestTimer!=null) {
                         onRequestWatingDialogListener.onTimeOverToShowLoading();
                         timers.remove(requestUrl);
                     }
