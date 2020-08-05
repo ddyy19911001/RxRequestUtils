@@ -19,16 +19,16 @@ import okhttp3.ResponseBody;
  */
 public class ApiFunc<T> implements Function<ResponseBody, T> {
     private Type type;
-    private String requestUrl;
+    private String keyRequestUrl;
 
-    public ApiFunc(Type type,String requestUrl) {
+    public ApiFunc(Type type,String keyRequestUrl) {
         this.type = type;
-        this.requestUrl=requestUrl;
+        this.keyRequestUrl=keyRequestUrl;
     }
 
     @Override
     public T apply(ResponseBody responseBody) throws Exception {
-        ViseHttp.CONFIG().timers.remove(requestUrl);
+        ViseHttp.CONFIG().timers.remove(keyRequestUrl);
         ViseHttp.CONFIG().onRequestWatingDialogListener.onRequestOverLoadingNeedClose();
         Gson gson = new Gson();
         String json;

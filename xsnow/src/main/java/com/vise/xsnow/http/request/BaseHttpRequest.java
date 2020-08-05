@@ -42,7 +42,7 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
     protected CacheMode cacheMode;//本地缓存类型
     protected String cacheKey;//本地缓存Key
     protected long cacheTime;//本地缓存时间
-    protected Map<String, String> params = new LinkedHashMap<>();//请求参数
+    public Map<String, String> params = new LinkedHashMap<>();//请求参数
     private String logTag;
 
     public BaseHttpRequest() {
@@ -140,10 +140,11 @@ public abstract class BaseHttpRequest<R extends BaseHttpRequest> extends BaseReq
         return new ObservableTransformer<ResponseBody, T>() {
             @Override
             public ObservableSource<T> apply(Observable<ResponseBody> apiResultObservable) {
+                String paramsStr=params.size()==0?"null": GsonUtil.gson().toJson(params);
                 return apiResultObservable
                         .subscribeOn(Schedulers.io())
                         .unsubscribeOn(Schedulers.io())
-                        .map(new ApiFunc<T>(type,requestUrl))
+                        .map(new ApiFunc<T>(type,requestUrl+"/params="+paramsStr))
                         .observeOn(AndroidSchedulers.mainThread())
                         .retryWhen(new ApiRetryFunc(retryCount, retryDelayMillis));
             }
