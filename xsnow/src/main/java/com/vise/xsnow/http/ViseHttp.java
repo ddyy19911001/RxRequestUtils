@@ -20,6 +20,7 @@ import com.vise.xsnow.http.request.UploadRequest;
 
 import io.reactivex.disposables.Disposable;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 
 /**
@@ -33,7 +34,8 @@ public class ViseHttp {
     private static Retrofit.Builder retrofitBuilder;
     private static ApiCache.Builder apiCacheBuilder;
     private static OkHttpClient okHttpClient;
-
+    private static boolean isInterceptResponseInfo=false;//是否拦截响应
+    private static OnResponseInfoInterCeptListener infoInterCeptListener;
     private static final HttpGlobalConfig NET_GLOBAL_CONFIG = HttpGlobalConfig.getInstance();
 
     public static HttpGlobalConfig CONFIG() {
@@ -100,6 +102,27 @@ public class ViseHttp {
 
     public static ApiCache getApiCache() {
         return getApiCacheBuilder().build();
+    }
+
+    public static void setIsInterceptResponseInfo(boolean isInterceptResponseInfo) {
+        ViseHttp.isInterceptResponseInfo = isInterceptResponseInfo;
+    }
+
+    public static boolean getIsInterceptResponseInfo() {
+        return isInterceptResponseInfo;
+    }
+
+    public static OnResponseInfoInterCeptListener getInfoInterCeptListener() {
+        return infoInterCeptListener;
+    }
+
+    public static void setInfoInterCeptListener(OnResponseInfoInterCeptListener infoInterCeptListener) {
+        ViseHttp.infoInterCeptListener = infoInterCeptListener;
+    }
+
+
+    public interface OnResponseInfoInterCeptListener{
+        void onInterCeptResponse(ResponseBody responseBody);
     }
 
     /**

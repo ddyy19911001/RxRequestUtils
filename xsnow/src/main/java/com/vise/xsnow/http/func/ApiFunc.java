@@ -28,6 +28,11 @@ public class ApiFunc<T> implements Function<ResponseBody, T> {
 
     @Override
     public T apply(ResponseBody responseBody) throws Exception {
+        if(ViseHttp.getIsInterceptResponseInfo()){
+            if(ViseHttp.getInfoInterCeptListener()!=null){
+                ViseHttp.getInfoInterCeptListener().onInterCeptResponse(responseBody);
+            }
+        }
         ViseHttp.CONFIG().timers.remove(keyRequestUrl);
         ViseHttp.CONFIG().onRequestWatingDialogListener.onRequestOverLoadingNeedClose();
         Gson gson = new Gson();
