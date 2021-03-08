@@ -184,9 +184,6 @@ public class HttpGlobalConfig {
      * 设置默认配置
      */
     public static void initDefaultSetting() {
-        HashMap<String,String> map=new HashMap<>();
-        map.put("Content-Type","application/x-www-form-urlencoded");
-        instance.globalHeaders=map;
         instance.SSLSocketFactory(MySSLSocketFactory.createSSLSocketFactory());
     }
 
