@@ -17,7 +17,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        implementation 'com.github.ddyy19911001:RxRequestUtils:2.2'
+	        implementation 'com.github.ddyy19911001:RxRequestUtils:2.4'
 	}
 
 使用说明：https://github.com/xiaoyaoyou1212/XSnow/wiki/详细使用介绍
